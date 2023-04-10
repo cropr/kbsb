@@ -1,0 +1,3 @@
+[submodule "kbsbcontent"]
+	path = kbsbcontent
+	url = git@github.com:cropr/kbsbcontent.git
