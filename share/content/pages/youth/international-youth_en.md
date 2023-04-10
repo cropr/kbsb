@@ -1,2 +1,0 @@
----
-title:  Internationl competitions youth

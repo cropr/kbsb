@@ -1,3 +1,0 @@
----
-title:  Internationale jeugdcompetities
----

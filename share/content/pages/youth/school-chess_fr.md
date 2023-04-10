@@ -1,3 +1,0 @@
----
-title: Inter-écoles
----
