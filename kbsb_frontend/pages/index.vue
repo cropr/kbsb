@@ -6,8 +6,8 @@
           <v-img contain src="/img/logo.svg" />
         </v-col>
         <v-col cols="8" sm="7">
-          <h1>{{ page.title }}</h1>
-          <nuxt-content :document="page" />
+          <h1>{{ pagetitle }}</h1>
+          <div class="nuxt-content" v-html="pagecontent" />
         </v-col>
         <v-col cols="12" sm="3">
           <v-card>
@@ -16,8 +16,10 @@
             </v-card-title>
             <v-card-text>
               <div class="pa-2">
-                <a class="green--text"
-                  :href="phpbaseurl + 'sites/manager/GestionFICHES/FRBE_Fiche.php'">
+                <a
+                  class="green--text"
+                  :href="phpbaseurl + 'sites/manager/GestionFICHES/FRBE_Fiche.php'"
+                >
                   Elo
                 </a>
               </div>
@@ -32,14 +34,18 @@
                 </a>
               </div>
               <div class="pa-2">
-                <a class="green--text"
-                  :href="phpbaseurl + 'sites/manager/GestionCOMMON/GestionLogin.php'">
+                <a
+                  class="green--text"
+                  :href="phpbaseurl + 'sites/manager/GestionCOMMON/GestionLogin.php'"
+                >
                   Player manager
                 </a>
               </div>
               <div class="pa-2">
-                <a class="green--text"
-                  :href="phpbaseurl + 'sites/manager/GestionSWAR/SwarResults.php'">
+                <a
+                  class="green--text"
+                  :href="phpbaseurl + 'sites/manager/GestionSWAR/SwarResults.php'"
+                >
                   {{ $t('Results SWAR') }}
                 </a>
               </div>
@@ -113,53 +119,68 @@
 
 <script>
 
-import { marked } from 'marked'
-import { phpbaseurl, notitle, nointro } from '@/util/cms'
+import showdown from 'showdown'
+import { phpbaseurl } from '@/util/cms'
 
-function compareDates(a, b) {
+function compareDates (a, b) {
   return a.date - b.date
 }
 
 export default {
   layout: 'landing',
 
-  data() {
+  data () {
     return {
       articles3: [],
       articlesRest: [],
       calitems: [],
-      page__nl: {},
-      page__fr: {},
-      page__de: {},
-      page__en: {},
+      page: {},
+      parsed: {},
+      micromark: null,
       phpbaseurl
     }
   },
 
-  async fetch() {
-    this.page__nl = await this.$content('pages', 'index_nl').fetch()
-    this.page__fr = await this.$content('pages', 'index_fr').fetch()
-    this.page__de = await this.$content('pages', 'index_de').fetch()
-    this.page__en = await this.$content('pages', 'index_en').fetch()
-    this.parseCalendarItems(await this.$content('calendar').fetch())
+  async fetch () {
+    this.page = await this.$content('pages', 'home').fetch()
+    const articles = await this.$content('articles').fetch()
+    console.log('articles', articles.length)
+    const calenderItems = await this.$content('calendar').fetch()
+    console.log('cal items', calenderItems.length)
+    this.readArticles(articles)
+    this.parseCalendarItems(calenderItems)
     this.calitems.sort(compareDates)
   },
 
   computed: {
-    page() { return this['page__' + this.$i18n.locale] },
-    future_4ci() {
+
+    future_4ci () {
       const yesterday = new Date() - 86400000
       return this.calitems.filter(ci => ci.date > yesterday).slice(0, 4)
+    },
+
+    pagecontent () {
+      const pcontent = this.page[`content_${this.$i18n.locale}`]
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagetitle () {
+      const locale = this.$i18n.locale
+      const pti18 = this.page[`title_${locale}`]
+      const ptitle = pti18 && pti18.length ? pti18 : this.page.title
+      return ptitle
     }
+
   },
 
-  mounted() {
-    this.getActiveArticles()
+  mounted () {
+    console.log('mounting')
   },
 
   methods: {
 
-    calenderItem(c) {
+    calenderItem (c) {
       const output = []
       output.push(c.date.toLocaleDateString(this.$i18n.locale, { dateStyle: 'medium' }) + ':')
       output.push(c.title)
@@ -170,22 +191,11 @@ export default {
       return output.join(' ')
     },
 
-    getActiveArticles() {
-      console.log('fetching articles', this.$api)
-      this.$api.page.get_anon_articles().then(
-        (resp) => {
-          console.log('got articles', resp.data.items)
-          this.readArticles(resp.data.items)
-        },
-        resp => (console.error('could not fetch articles', resp))
-      )
-    },
-
-    gotoArticle(a) {
+    gotoArticle (a) {
       window.location.href = '/article?slug=' + a.slug
     },
 
-    parseCalendarItems(listci) {
+    parseCalendarItems (listci) {
       listci.forEach((ci) => {
         if (ci.multiple) {
           this.parseCalendarItems(ci.multiple)
@@ -204,7 +214,7 @@ export default {
       })
     },
 
-    ratingtrn() {
+    ratingtrn () {
       if (this.$i18n.locale === 'nl') {
         window.location.href = '/tools/ratingnl'
       } else {
@@ -212,29 +222,39 @@ export default {
       }
     },
 
-    readArticles(articles) {
+    readArticles (articles) {
+      const now = new Date()
+      const activearticles = []
       const locale = this.$i18n.locale
       this.articles3 = []
       this.articleRest = []
       articles.forEach((a, index) => {
-        const b = { slug: a.slug }
-        if (!a.title[locale] || !a.title[locale].value || !a.title[locale].value.length) {
-          b.title = notitle[locale]
-        } else {
-          b.title = a.title[locale].value
+        const activedate = new Date(a.active_since)
+        const expirydate = new Date(activedate)
+        expirydate.setDate(expirydate.getDate() + Number(a.active_days))
+        if (activedate < now && expirydate > now) {
+          const titlei18n = a[`title_${locale}`]
+          const introi18n = a[`intro_${locale}`]
+          activearticles.push({
+            activedate,
+            expirydate,
+            title: titlei18n && titlei18n.length ? titlei18n : a.title,
+            intro: introi18n && introi18n.length ? introi18n : a.intro,
+            text: a[`text_${locale}`],
+            slug: a.slug
+          })
         }
-        if (!a.intro[locale] || !a.intro[locale].value || !a.intro[locale].value.length) {
-          b.intro = marked.parse(nointro[this.$i18n.locale])
+      })
+      activearticles.sort((a, b) => b.activedate - a.activedate)
+      activearticles.forEach((a, ix) => {
+        if (ix < 3) {
+          this.articles3.push(a)
         } else {
-          b.intro = marked.parse(a.intro[locale].value)
-        }
-        if (index < 3) {
-          this.articles3.push(b)
-        } else {
-          this.articlesRest.push(b)
+          this.articlesRest.push(a)
         }
       })
     }
+
   }
 
 }

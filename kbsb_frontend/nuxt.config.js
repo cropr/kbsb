@@ -5,7 +5,7 @@ export default {
   },
 
   build: {
-    extend(config, { loaders }) {
+    extend (config, { loaders }) {
       config.module.rules.push({
         test: /\.ya?ml$/,
         type: 'json', // Required by Webpack v4
@@ -19,14 +19,14 @@ export default {
   components: true,
 
   content: {
-    dir: '../share/content'
+    dir: '../kbsbcontent'
   },
 
   css: [],
 
   env: {
     google_client_id: process.env.GOOGLE_CLIENT_ID ||
-      "658290412135-v6ah768urdv83dn76ra4mkiovdalal2k.apps.googleusercontent.com"
+      '658290412135-v6ah768urdv83dn76ra4mkiovdalal2k.apps.googleusercontent.com'
   },
 
   generate: {
@@ -52,7 +52,7 @@ export default {
         rel: 'stylesheet',
         href:
           'https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css'
-      },
+      }
     ],
     meta: [
       { charset: 'utf-8' },
@@ -71,7 +71,7 @@ export default {
         async: true,
         defer: true
       }
-    ],
+    ]
 
   },
 
