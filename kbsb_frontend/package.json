@@ -21,6 +21,7 @@
     "@nuxtjs/proxy": "^2.1.0",
     "core-js": "^3.8.3",
     "filepond": "^4.29.0",
+    "jose": "^4.14.1",
     "json-loader": "^0.5.7",
     "markdown-it-vue": "^1.1.6",
     "marked": "^4.0.5",

@@ -8426,6 +8426,11 @@ jiti@^1.9.2:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.16.0.tgz#f72065954446ad1866fa8d6bcc3bed3cc1cebdaa"
   integrity sha512-L3BJStEf5NAqNuzrpfbN71dp43mYIcBUlCRea/vdyv5dW/AYa1d4bpelko4SHdY3I6eN9Wzyasxirj1/vv5kmg==
 
+jose@^4.14.1:
+  version "4.14.1"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.14.1.tgz#74f12a621ea2ef850bf0dd8405e2ee4041aea934"
+  integrity sha512-SgjXLpP7jhQkUNKL6RpowoR/IF4QKE+WjLDMpNnh2vmhiFs67NftrNpvFtgbwpvRdtueFliahYYWz9E+XZZQlg==
+
 js-beautify@^1.6.12, js-beautify@^1.6.14:
   version "1.14.7"
   resolved "https://registry.yarnpkg.com/js-beautify/-/js-beautify-1.14.7.tgz#9206296de33f86dc106d3e50a35b7cf8729703b2"

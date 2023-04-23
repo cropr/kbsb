@@ -61,16 +61,16 @@ export default {
     ],
     titleTemplate: '%s | KBSB-FRBE-KSB',
     script: [
-      {
-        src: 'https://apis.google.com/js/platform.js',
-        async: true,
-        defer: true
-      },
-      {
-        src: 'https://apis.google.com/js/api:client.js',
-        async: true,
-        defer: true
-      }
+      // {
+      //   src: 'https://apis.google.com/js/platform.js',
+      //   async: true,
+      //   defer: true
+      // },
+      // {
+      //   src: 'https://apis.google.com/js/api:client.js',
+      //   async: true,
+      //   defer: true
+      // }
     ]
 
   },
@@ -115,7 +115,8 @@ export default {
     axios: {
       browserBaseURL: process.env.BROWSER_BASE_URL
     },
-    VALIDATIION_FORM: process.env.VALIDATIION_FORM || true
+    VALIDATIION_FORM: process.env.VALIDATIION_FORM || true,
+    statamic_url: process.env.STATAMIC_URL || 'http://localhost:8001'
   },
 
   render: {
