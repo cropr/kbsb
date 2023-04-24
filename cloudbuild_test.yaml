@@ -1,10 +1,10 @@
 steps:
-  - name: node
+  - name: node:16
     dir: kbsb_frontend
     entrypoint: yarn
     args: ['install']
 
-  - name: node
+  - name: node:16
     dir: kbsb_frontend
     entrypoint: yarn
     args: ['generate']
