@@ -1,0 +1,19 @@
+steps:
+  - name: node
+    dir: kbsb_frontend
+    entrypoint: yarn
+    args: ['install']
+
+  - name: node
+    dir: kbsb_frontend
+    entrypoint: yarn
+    args: ['generate']
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: bash
+    dir: kbsb_backend
+    args:
+      [
+        "-c",
+        "gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy app_test.yaml",
+      ]
