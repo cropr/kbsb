@@ -1,0 +1,4 @@
+#!/bin/sh
+pushd kbsbcontent && git pull && popd
+pushd kbsb_frontend && yarn generate && popd
+pushd kbsb_backend && gcloud app deploy --quiet app-test.yaml && popd

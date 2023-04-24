@@ -12,10 +12,10 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <nuxt-content :document="page__nl" class="mt-3" />
+          <div class="mt-1" v-html="pagecontent_nl" />
         </v-tab-item>
         <v-tab-item>
-          <nuxt-content :document="page__fr" class="mt-3" />
+          <div class="mt-1" v-html="pagecontent_fr" />
         </v-tab-item>
       </v-tabs-items>
     </v-container>
@@ -23,6 +23,9 @@
 </template>
 
 <script>
+
+import showdown from 'showdown'
+
 export default {
 
   layout: 'default',
@@ -30,10 +33,7 @@ export default {
   data () {
     return {
       tab: 0,
-      page__nl: {},
-      page__fr: {},
-      page__de: {},
-      page__en: {}
+      page: {}
     }
   },
 
@@ -78,7 +78,24 @@ export default {
   },
 
   computed: {
-    page () { return this['page__' + this.$i18n.locale] }
+    pagecontent_nl () {
+      const pcontent = this.page.content_nl
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagecontent_fr () {
+      const pcontent = this.page.content_fr
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagetitle () {
+      const locale = this.$i18n.locale
+      const pti18 = this.page[`title_${locale}`]
+      const ptitle = pti18 && pti18.length ? pti18 : this.page.title
+      return ptitle
+    }
   }
 }
 </script>
