@@ -1,11 +1,14 @@
 <template>
   <v-container>
     <h1>{{ page.title }}</h1>
-    <nuxt-content :document="page" />
+    <div class="mt-1" v-html="pagecontent" />
   </v-container>
 </template>
 
 <script>
+
+import showdown from 'showdown'
+
 export default {
 
   layout: 'default',
@@ -21,10 +24,7 @@ export default {
   },
 
   async fetch () {
-    this.page__nl = await this.$content('pages', 'admin', 'regional_nl').fetch()
-    this.page__fr = await this.$content('pages', 'admin', 'regional_fr').fetch()
-    this.page__de = await this.$content('pages', 'admin', 'regional_de').fetch()
-    this.page__en = await this.$content('pages', 'admin', 'regional_en').fetch()
+    this.page = await this.$content('pages', 'regional').fetch()
   },
 
   head: {
@@ -61,7 +61,18 @@ export default {
   },
 
   computed: {
-    page () { return this['page__' + this.$i18n.locale] }
+    pagecontent () {
+      const pcontent = this.page[`content_${this.$i18n.locale}`]
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagetitle () {
+      const locale = this.$i18n.locale
+      const pti18 = this.page[`title_${locale}`]
+      const ptitle = pti18 && pti18.length ? pti18 : this.page.title
+      return ptitle
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>{{ page.title }}</h1>
+    <h1>{{ pagetitle }}</h1>
     <v-container class="mt-1 markedcontent elevation-2">
       <v-tabs v-model="tab" light slider-color="deep-purple">
         <v-tab class="mx-2">
@@ -12,10 +12,10 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <div class="mt-1" v-html="pagecontent_nl" />
+          <div class="mt-2" v-html="pagecontent_nl" />
         </v-tab-item>
         <v-tab-item>
-          <div class="mt-1" v-html="pagecontent_fr" />
+          <div class="mt-2" v-html="pagecontent_nl" />
         </v-tab-item>
       </v-tabs-items>
     </v-container>
@@ -38,10 +38,7 @@ export default {
   },
 
   async fetch () {
-    this.page__nl = await this.$content('pages', 'admin', 'internalrules_nl').fetch()
-    this.page__fr = await this.$content('pages', 'admin', 'internalrules_fr').fetch()
-    this.page__de = await this.$content('pages', 'admin', 'internalrules_de').fetch()
-    this.page__en = await this.$content('pages', 'admin', 'internalrules_en').fetch()
+    this.page = await this.$content('pages', 'internal-rules').fetch()
   },
 
   head: {

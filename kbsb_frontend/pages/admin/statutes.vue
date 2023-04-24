@@ -12,10 +12,10 @@
       </v-tabs>
       <v-tabs-items v-model="tab">
         <v-tab-item>
-          <nuxt-content :document="page__nl" class="mt-3" />
+          <div class="mt-2" v-html="pagecontent_nl" />
         </v-tab-item>
         <v-tab-item>
-          <nuxt-content :document="page__fr" class="mt-3" />
+          <div class="mt-2" v-html="pagecontent_nl" />
         </v-tab-item>
       </v-tabs-items>
     </v-container>
@@ -23,25 +23,22 @@
 </template>
 
 <script>
+
+import showdown from 'showdown'
+
 export default {
 
   layout: 'default',
 
   data () {
     return {
-      page__nl: {},
-      page__fr: {},
-      page__de: {},
-      page__en: {},
+      page: {},
       tab: 0
     }
   },
 
   async fetch () {
-    this.page__nl = await this.$content('pages', 'admin', 'statutes_nl').fetch()
-    this.page__fr = await this.$content('pages', 'admin', 'statutes_fr').fetch()
-    this.page__de = await this.$content('pages', 'admin', 'statutes_de').fetch()
-    this.page__en = await this.$content('pages', 'admin', 'statutes_en').fetch()
+    this.page = await this.$content('pages', 'statutes').fetch()
   },
 
   head: {
@@ -78,7 +75,24 @@ export default {
   },
 
   computed: {
-    page () { return this['page__' + this.$i18n.locale] }
+    pagecontent_nl () {
+      const pcontent = this.page.content_nl
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagecontent_fr () {
+      const pcontent = this.page.content_fr
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagetitle () {
+      const locale = this.$i18n.locale
+      const pti18 = this.page[`title_${locale}`]
+      const ptitle = pti18 && pti18.length ? pti18 : this.page.title
+      return ptitle
+    }
   }
 }
 </script>

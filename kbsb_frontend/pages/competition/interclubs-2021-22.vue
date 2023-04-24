@@ -7,25 +7,21 @@
 
 <script>
 
+import showdown from 'showdown'
+
 export default {
 
   layout: 'default',
 
   data () {
     return {
-      page__nl: {},
-      page__fr: {},
-      page__de: {},
-      page__en: {},
+      page: {},
       tab: 0
     }
   },
 
   async fetch () {
-    this.page__nl = await this.$content('pages', 'competition', 'interclubs-2021-22_nl').fetch()
-    this.page__fr = await this.$content('pages', 'competition', 'interclubs-2021-22_fr').fetch()
-    this.page__de = await this.$content('pages', 'competition', 'interclubs-2021-22_de').fetch()
-    this.page__en = await this.$content('pages', 'competition', 'interclubs-2021-22_en').fetch()
+    this.page = await this.$content('pages', 'interclubs-2021-22').fetch()
   },
 
   head: {
@@ -61,7 +57,18 @@ export default {
     ]
   },
   computed: {
-    page () { return this['page__' + this.$i18n.locale] }
+    pagecontent () {
+      const pcontent = this.page[`content_${this.$i18n.locale}`]
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagetitle () {
+      const locale = this.$i18n.locale
+      const pti18 = this.page[`title_${locale}`]
+      const ptitle = pti18 && pti18.length ? pti18 : this.page.title
+      return ptitle
+    }
   }
 
 }
