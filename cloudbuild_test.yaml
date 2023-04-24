@@ -15,5 +15,5 @@ steps:
     args:
       [
         "-c",
-        "gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy app_test.yaml",
+        "gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy app-test.yaml",
       ]
