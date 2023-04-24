@@ -1,86 +1,55 @@
 <template>
   <v-container>
-    <h1>{{ title }}</h1>
-    <div class="mt-1" v-html="intro" />
-    <div class="mt-1" v-html="body" />
+    <h1>{{ pagetitle }}</h1>
+    <div class="mt-1" v-html="pageintro" />
+    <div class="mt-1" v-html="pagecontent" />
   </v-container>
 </template>
 
 <script>
 
-import { marked } from 'marked'
+import showdown from 'showdown'
 
 export default {
 
   name: 'Article',
 
-  layout: 'landing',
+  layout: 'default',
 
-  head: {
-    title: 'Article',
-  },
-
-  data() {
+  data () {
     return {
       page: {}
     }
   },
 
+  async fetch () {
+    this.page = await this.$content('articles', this.$route.query.slug).fetch()
+  },
+
+  head: {
+    title: 'Article'
+  },
 
   computed: {
 
-    body() {
-      let pt = ''
-      if (this.page.body) {
-        pt = this.page.body.default.value
-        if (this.page.body[this.$i18n.locale]) {
-          pt = this.page.body[this.$i18n.locale].value
-        }
-      }
-      return marked(pt)
+    pagecontent () {
+      const pcontent = this.page[`text_${this.$i18n.locale}`]
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
     },
 
-    intro() {
-      let pt = ''
-      if (this.page.intro) {
-        pt = this.page.intro.default.value
-        if (this.page.intro[this.$i18n.locale]) {
-          pt = this.page.intro[this.$i18n.locale].value
-        }
-      }
-      return marked(pt)
+    pageintro () {
+      const pint18 = this.page[`intro_${this.$i18n.locale}`]
+      const pintro = pint18 && pint18.length ? pint18 : this.page.intro
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pintro)
     },
 
-    title() {
-      let pt = ''
-      const t = this.page.title
+    pagetitle () {
       const locale = this.$i18n.locale
-      if (t) {
-        pt = t.default.value
-        if (t[locale]) {
-          pt = t[locale].value
-        }
-      }
-      return pt
-    }
-
-  },
-
-  mounted() {
-    this.getContent()
-  },
-
-  methods: {
-
-    async getContent() {
-      try {
-        const resp = await this.$api.page.anon_slug_page({ slug: this.$route.query.slug })
-        console.log('article', resp)
-        this.page = resp.data
-        console.log('article processed')
-      } catch (error) {
-        console.error('could not fetch article', error)
-      }
+      const pti18 = this.page[`title_${locale}`]
+      const ptitle = pti18 && pti18.length ? pti18 : this.page.title
+      return ptitle
     }
 
   }

@@ -144,9 +144,7 @@ export default {
   async fetch () {
     this.page = await this.$content('pages', 'home').fetch()
     const articles = await this.$content('articles').fetch()
-    console.log('articles', articles.length)
     const calenderItems = await this.$content('calendar').fetch()
-    console.log('cal items', calenderItems.length)
     this.readArticles(articles)
     this.parseCalendarItems(calenderItems)
     this.calitems.sort(compareDates)
@@ -172,10 +170,6 @@ export default {
       return ptitle
     }
 
-  },
-
-  mounted () {
-    console.log('mounting')
   },
 
   methods: {
