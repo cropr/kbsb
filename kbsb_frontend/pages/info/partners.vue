@@ -19,7 +19,7 @@ export default {
   },
 
   async fetch () {
-    this.page = await this.$content('pages', 'partner').fetch()
+    this.page = await this.$content('pages', 'partners').fetch()
   },
 
   head: {

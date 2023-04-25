@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>{{ page.title }}</h1>
+    <h1>{{ pagetitle }}</h1>
     <v-container class="mt-1 markedcontent elevation-2">
       <v-tabs v-model="tab" light slider-color="deep-purple">
         <v-tab class="mx-2">
