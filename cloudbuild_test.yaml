@@ -9,7 +9,7 @@ steps:
     args: ['--cwd', 'kbsb_frontend', 'generate']
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: bash
+    entrypoint: bash 
     args:
       [
         "-c",

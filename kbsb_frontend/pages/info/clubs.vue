@@ -1,8 +1,13 @@
 <template>
   <v-container>
     <h1>Clubs</h1>
-    <v-data-table :headers="headers" :items="filtered" :footer-props="footerProps"
-      class="elevation-1" sort-by="idclub">
+    <v-data-table
+      :headers="headers"
+      :items="filtered"
+      :footer-props="footerProps"
+      class="elevation-1"
+      sort-by="idclub"
+    >
       <template #top>
         <v-toolbar flat color="white">
           <v-toolbar-title> {{ $t('Reports') }}</v-toolbar-title>
@@ -21,20 +26,19 @@
         {{ $t(item.topic) }}
       </template>
       <template #item.path="{ item }">
-        URL: <a :href="'/api/v1/filecontent/' + item.url">{{ item.name }}</a>
+        URL: <a :href="urlfile(item.url)">{{ item.name }}</a>
       </template>
       <template #no-data>
         No reports yet.
       </template>
     </v-data-table>
-
   </v-container>
 </template>
 
 <script>
 export default {
   layout: 'default',
-  data() {
+  data () {
     return {
       filter: {},
       headers: [
@@ -91,6 +95,13 @@ export default {
         defer: true
       }
     ]
+  },
+
+  methods: {
+    urlfile (url) {
+      return '/api/v1/filecontent/' + url
+    }
   }
+
 }
 </script>

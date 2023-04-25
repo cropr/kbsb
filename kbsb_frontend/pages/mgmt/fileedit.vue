@@ -6,7 +6,14 @@
         <v-spacer />
         <v-tooltip bottom>
           <template #activator="{ on }">
-            <v-btn slot="activator" outlined fab color="deep-purple" v-on="on" @click="back()">
+            <v-btn
+              slot="activator"
+              outlined
+              fab
+              color="deep-purple"
+              v-on="on"
+              @click="back()"
+            >
               <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
           </template>
@@ -14,7 +21,14 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template #activator="{ on }">
-            <v-btn slot="activator" outlined fab color="deep-purple" v-on="on" @click="save()">
+            <v-btn
+              slot="activator"
+              outlined
+              fab
+              color="deep-purple"
+              v-on="on"
+              @click="save()"
+            >
               <v-icon>mdi-content-save</v-icon>
             </v-btn>
           </template>
@@ -22,7 +36,14 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template #activator="{ on }">
-            <v-btn slot="activator" outlined fab color="deep-purple" v-on="on" @click="remove()">
+            <v-btn
+              slot="activator"
+              outlined
+              fab
+              color="deep-purple"
+              v-on="on"
+              @click="remove()"
+            >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </template>
@@ -35,19 +56,34 @@
             <v-col cols="12" sm="6">
               <v-text-field v-model="f.name" label="Name" />
               <v-text-field v-model="f.created_by" label="Owner" />
-              <v-select label="Topic" v-model="f.topic" :items="topictypes" />
+              <v-select v-model="f.topic" label="Topic" :items="topictypes" />
             </v-col>
             <v-col cols="12" sm="6">
-              <p>URL: <a :href="'/api/v1/filecontent/' + f.url">/api/v1/filecontent/{{ f.url }}</a>
+              <p>
+                URL: <a :href="urlfile(f.url)">/api/v1/filecontent/{{ f.url }}</a>
               </p>
-              <v-menu v-model="menu_topicdate" :close-on-content-click="false" :nudge-right="40"
-                transition="scale-transition" offset-y min-width="290px">
+              <v-menu
+                v-model="menu_topicdate"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
                 <template #activator="{ on }">
-                  <v-text-field v-model="f.topicdate" label="Topic date"
-                    prepend-icon="mdi-calendar-range" readonly v-on="on" />
+                  <v-text-field
+                    v-model="f.topicdate"
+                    label="Topic date"
+                    prepend-icon="mdi-calendar-range"
+                    readonly
+                    v-on="on"
+                  />
                 </template>
-                <v-date-picker v-model="f.topicdate" color="deep-purple"
-                  @input="menu_topicdate = false" />
+                <v-date-picker
+                  v-model="f.topicdate"
+                  color="deep-purple"
+                  @input="menu_topicdate = false"
+                />
               </v-menu>
             </v-col>
           </v-row>
@@ -66,14 +102,14 @@ export default {
 
   layout: 'mgmt',
 
-  data() {
+  data () {
     return {
       f: {},
       menu_topicdate: false,
       name: '',
       photosrc: null,
       savefile: false,
-      topictypes: topictypes,
+      topictypes,
       yesno: [
         { value: true, text: 'Yes' },
         { value: false, text: 'No' }
@@ -82,20 +118,20 @@ export default {
   },
 
   computed: {
-    token() { return this.$store.state.newlogin.value }
+    token () { return this.$store.state.newlogin.value }
   },
 
-  mounted() {
+  mounted () {
     this.getFile()
   },
 
   methods: {
 
-    back() {
+    back () {
       this.$router.push('/mgmt/filelist')
     },
 
-    async getFile() {
+    async getFile () {
       try {
         const resp = await this.$api.file.get_file({
           id: this.$route.query.id,
@@ -113,12 +149,12 @@ export default {
       }
     },
 
-    readFile(file) {
+    readFile (file) {
       this.f = file
       this.name = this.f.name + ''
     },
 
-    async remove() {
+    async remove () {
       if (window.confirm('Are you sure to delete file "' + this.name + '"?')) {
         try {
           await this.$api.file.delete_file({
@@ -139,7 +175,7 @@ export default {
       }
     },
 
-    async save() {
+    async save () {
       try {
         await this.$api.file.update_file({
           ...this.f,
@@ -156,6 +192,10 @@ export default {
           this.$root.$emit('snackbar', { text: 'Saving file failed', reason: resp.data.detail })
         }
       }
+    },
+
+    urlfile (url) {
+      return '/api/v1/filecontent/' + url
     }
 
   }

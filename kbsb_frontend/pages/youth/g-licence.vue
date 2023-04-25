@@ -1,11 +1,13 @@
 <template>
   <v-container>
-    <h1>{{ page.title }}</h1>
+    <h1>{{ pagetitle }}</h1>
     <nuxt-content :document="page" />
   </v-container>
 </template>
 
 <script>
+import showdown from 'showdown'
+
 export default {
 
   layout: 'default',
@@ -18,7 +20,7 @@ export default {
   },
 
   async fetch () {
-    this.page = await this.$content('pages', 'youth', 'g-licence_fr').fetch()
+    this.page = await this.$content('pages', 'license-g').fetch()
   },
 
   head: {
@@ -52,6 +54,20 @@ export default {
         defer: true
       }
     ]
+  },
+  computed: {
+    pagecontent () {
+      const pcontent = this.page[`content_${this.$i18n.locale}`]
+      const converter = new showdown.Converter()
+      return converter.makeHtml(pcontent)
+    },
+
+    pagetitle () {
+      const locale = this.$i18n.locale
+      const pti18 = this.page[`title_${locale}`]
+      const ptitle = pti18 && pti18.length ? pti18 : this.page.title
+      return ptitle
+    }
   }
 }
 </script>

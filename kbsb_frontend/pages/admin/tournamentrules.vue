@@ -38,7 +38,7 @@ export default {
   },
 
   async fetch () {
-    this.page = await this.$content('pages', 'admin', 'tournament-rules').fetch()
+    this.page = await this.$content('pages', 'tournament-rules').fetch()
   },
 
   head: {

@@ -1,8 +1,14 @@
 <template>
   <v-container>
     <h1>{{ $t('Reports') }}</h1>
-    <v-data-table :headers="headers" :items="filteredfiles" :footer-props="footerProps"
-      class="elevation-1" sort-by="topicdate" :sort-desc="true">
+    <v-data-table
+      :headers="headers"
+      :items="filteredfiles"
+      :footer-props="footerProps"
+      class="elevation-1"
+      sort-by="topicdate"
+      :sort-desc="true"
+    >
       <template #top>
         <v-toolbar flat color="white">
           <v-toolbar-title> {{ $t('Reports') }}</v-toolbar-title>
@@ -21,7 +27,7 @@
         {{ $t(item.topic) }}
       </template>
       <template #item.path="{ item }">
-        URL: <a :href="'/api/v1/filecontent/' + item.url">{{ item.name }}</a>
+        URL: <a :href="urlfile(item.url)">{{ item.name }}</a>
       </template>
       <template #no-data>
         No reports yet.
@@ -35,7 +41,7 @@ export default {
 
   layout: 'default',
 
-  data() {
+  data () {
     return {
       filter: {},
       headers: [
@@ -91,7 +97,7 @@ export default {
   },
 
   computed: {
-    filteredfiles() {
+    filteredfiles () {
       const self = this; const fa = []
       if (!this.filter.board && !this.filter.ga) { return this.files }
       this.files.forEach((f) => {
@@ -107,13 +113,13 @@ export default {
     }
   },
 
-  mounted() {
+  mounted () {
     this.getReports()
   },
 
   methods: {
 
-    async getReports() {
+    async getReports () {
       try {
         const resp = await this.$api.file.anon_get_files({ reports: 1 })
         this.files = resp.data.files
@@ -121,6 +127,10 @@ export default {
         console.error('getting getFiles', error)
         this.$root.$emit('snackbar', { text: 'Getting files failed', reason: error })
       }
+    },
+
+    urlfile (url) {
+      return '/api/v1/filecontent/' + url
     }
 
   }
