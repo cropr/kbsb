@@ -9,7 +9,7 @@ from reddevil.core import (
 )
 
 from . import (
-    ICEnrollment,
+    ICRegistration,
     ICEnrollmentIn,
     ICVenueIn,
     ICVenueDB,
@@ -70,7 +70,7 @@ router = APIRouter(prefix="/api/v1/interclubs")
 # enrollments
 
 
-@router.get("/anon/enrollment/{idclub}", response_model=ICEnrollment | None)
+@router.get("/anon/enrollment/{idclub}", response_model=ICRegistration | None)
 async def api_find_interclubenrollment(idclub: int):
     """
     return an enrollment by idclub
@@ -85,7 +85,7 @@ async def api_find_interclubenrollment(idclub: int):
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/clb/enrollment/{idclub}", response_model=ICEnrollment)
+@router.post("/clb/enrollment/{idclub}", response_model=ICRegistration)
 async def api_clb_set_enrollment(
     idclub: int,
     ie: ICEnrollmentIn,
@@ -104,7 +104,7 @@ async def api_clb_set_enrollment(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/mgmt/enrollment/{idclub}", response_model=ICEnrollment)
+@router.post("/mgmt/enrollment/{idclub}", response_model=ICRegistration)
 async def api_mgmt_set_enrollment(
     idclub: int,
     ie: ICEnrollmentIn,
@@ -136,7 +136,7 @@ async def api_xls_registrations(
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.post("/clb/enrollment/{idclub}", response_model=ICEnrollment)
+@router.post("/clb/enrollment/{idclub}", response_model=ICRegistration)
 async def api_set_enrollment(
     idclub: int,
     ie: ICEnrollmentIn,

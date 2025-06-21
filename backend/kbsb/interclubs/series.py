@@ -504,8 +504,14 @@ async def anon_getICstandings(idclub: int) -> list[ICStandingsDB] | None:
     return docs
 
 
-dbseasons = {"2324": DbICStandings2324}
-dbseries = {"2324": DbICSeries2324}
+dbseasons = {
+    "2324": DbICStandings2324,
+    "2425": DbICStandings2425,
+}
+dbseries = {
+    "2324": DbICSeries2324,
+    "2425": DbICSeries2425,
+}
 
 
 async def anon_getICstandingsArchive(season: str) -> list[ICStandingsDB] | None:

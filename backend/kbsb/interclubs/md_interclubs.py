@@ -359,12 +359,12 @@ class ICResult(BaseModel):
     results: list[ICResultItem]
 
 
-# enrollment
+# registration
 
 
-class ICEnrollmentDB(BaseModel):
+class ICRegistrationDB(BaseModel):
     """
-    an IC Enrollment as written in the database
+    an IC Registration as written in the database
     for doc purposes only
     """
 
@@ -382,9 +382,9 @@ class ICEnrollmentDB(BaseModel):
     wishes: dict[str, Any]
 
 
-class ICEnrollment(BaseModel):
+class ICRegistration(BaseModel):
     """
-    an IC Enrollment as used internally
+    an IC Registration as used internally
     """
 
     id: str | None = None
@@ -401,9 +401,9 @@ class ICEnrollment(BaseModel):
     wishes: dict | None = None
 
 
-class ICEnrollmentOut(BaseModel):
+class ICRegistrationOut(BaseModel):
     """
-    an IC Enrollment as used internally
+    an IC Registration as used internally
     """
 
     id: str
@@ -420,7 +420,7 @@ class ICEnrollmentOut(BaseModel):
     wishes: dict = {}
 
 
-class ICEnrollmentHistory(BaseModel):
+class ICRegistrationHistory(BaseModel):
     """
     a model represnting the history of enrollments
     """
@@ -431,7 +431,7 @@ class ICEnrollmentHistory(BaseModel):
     time: datetime
 
 
-class ICEnrollmentIn(BaseModel):
+class ICRegistrationIn(BaseModel):
     """
     a input validator for an new enrollment
     """
@@ -487,7 +487,7 @@ class ICVenueDB(BaseModel):
 
 
 class DbICSeries(DbBase):
-    COLLECTION = "interclub2425series"
+    COLLECTION = "ic_series"
     DOCUMENTTYPE = ICSeriesDB
     VERSION = 1
     IDGENERATOR = "uuid"
@@ -500,55 +500,53 @@ class DbICSeries2324(DbBase):
     IDGENERATOR = "uuid"
 
 
+class DbICSeries2425(DbBase):
+    COLLECTION = "interclub2425series"
+    DOCUMENTTYPE = ICSeriesDB
+    VERSION = 1
+    IDGENERATOR = "uuid"
+
+
 class DbICStandings(DbBase):
-    COLLECTION = "interclub2425standings"
+    COLLECTION = "ic_standings"
     DOCUMENTTYPE = ICStandingsDB
     VERSION = 1
     IDGENERATOR = "uuid"
 
 
 class DbICStandings2324(DbBase):
-    COLLECTION = "interclub2324standings"
+    COLLECTION = "ic_2324_standings"
     DOCUMENTTYPE = ICStandingsDB
     VERSION = 1
     IDGENERATOR = "uuid"
 
 
-class DbICVenue_Old(DbBase):
-    COLLECTION = "interclub2324venues"
-    DOCUMENTTYPE = ICVenueDB
+class DbICStandings2425(DbBase):
+    COLLECTION = "ic_2425_standings"
+    DOCUMENTTYPE = ICStandingsDB
     VERSION = 1
     IDGENERATOR = "uuid"
-    HISTORY = True
 
 
 class DbICVenue(DbBase):
-    COLLECTION = "interclub2425venues"
+    COLLECTION = "ic_venues"
     DOCUMENTTYPE = ICVenueDB
-    VERSION = 1
-    IDGENERATOR = "uuid"
-    HISTORY = True
-
-
-class DbICClub_Old(DbBase):
-    COLLECTION = "interclub2324club"
-    DOCUMENTTYPE = ICClubDB
     VERSION = 1
     IDGENERATOR = "uuid"
     HISTORY = True
 
 
 class DbICClub(DbBase):
-    COLLECTION = "interclub2425club"
+    COLLECTION = "ic_club"
     DOCUMENTTYPE = ICClubDB
     VERSION = 1
     IDGENERATOR = "uuid"
     HISTORY = True
 
 
-class DbICEnrollment(DbBase):
-    COLLECTION = "interclub2425enrollment"
-    DOCUMENTTYPE = ICEnrollmentDB
+class DbICRegistration(DbBase):
+    COLLECTION = "ic_registration"
+    DOCUMENTTYPE = ICRegistrationDB
     VERSION = 1
     IDGENERATOR = "uuid"
     HISTORY = True

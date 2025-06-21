@@ -4,9 +4,9 @@ from kbsb.interclubs import (
     ICClubDB,
     ICClubItem,
     ICEncounter,
-    ICEnrollment,
+    ICRegistration,
     ICEnrollmentIn,
-    ICEnrollmentOut,
+    ICRegistrationOut,
     ICGame,
     ICGameDetails,
     ICPlanning,
@@ -23,8 +23,8 @@ from kbsb.interclubs import (
 
 
 @register_fixture
-class IcEnrollmentFactory(ModelFactory[ICEnrollment]):
-    __model__ = ICEnrollment
+class IcEnrollmentFactory(ModelFactory[ICRegistration]):
+    __model__ = ICRegistration
 
 
 @register_fixture
@@ -33,8 +33,8 @@ class IcEnrollmentInFactory(ModelFactory[ICEnrollmentIn]):
 
 
 @register_fixture
-class IcEnrollmentOutFactory(ModelFactory[ICEnrollmentOut]):
-    __model__ = ICEnrollmentOut
+class IcEnrollmentOutFactory(ModelFactory[ICRegistrationOut]):
+    __model__ = ICRegistrationOut
 
 
 @register_fixture

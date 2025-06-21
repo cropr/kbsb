@@ -11,9 +11,9 @@ from reddevil.core import (
 )
 from reddevil.mail import MailParams
 from kbsb.interclubs import (
-    ICEnrollment,
+    ICRegistration,
     ICEnrollmentIn,
-    DbICEnrollment,
+    DbICRegistration,
     # ICDATA,
 )
 from kbsb.club import get_club_idclub, club_locale
@@ -31,45 +31,47 @@ async def create_icregistration(enr: ICEnrollmentIn) -> str:
     """
     enrdict = enr.model_dump()
     enrdict.pop("id", None)
-    return await DbICEnrollment.add(enrdict)
+    return await DbICRegistration.add(enrdict)
 
 
-async def get_icregistration(id: str, options: dict = {}) -> ICEnrollment:
+async def get_icregistration(id: str, options: dict = {}) -> ICRegistration:
     """
     get the interclub registration
     """
     filter = options.copy()
-    filter["_model"] = filter.pop("_model", ICEnrollment)
+    filter["_model"] = filter.pop("_model", ICRegistration)
     filter["id"] = id
-    return cast(ICEnrollment, await DbICEnrollment.find_single(filter))
+    return cast(ICRegistration, await DbICRegistration.find_single(filter))
 
 
-async def get_icregistrations(options: dict = {}) -> list[ICEnrollment]:
+async def get_icregistrations(options: dict = {}) -> list[ICRegistration]:
     """
     get the interclub registration
     """
     filter = options.copy()
-    filter["_model"] = filter.pop("_model", ICEnrollment)
-    return [cast(ICEnrollment, x) for x in await DbICEnrollment.find_multiple(filter)]
+    filter["_model"] = filter.pop("_model", ICRegistration)
+    return [
+        cast(ICRegistration, x) for x in await DbICRegistration.find_multiple(filter)
+    ]
 
 
 async def update_icregistration(
-    id: str, iu: ICEnrollment, options: dict[str, Any] = {}
-) -> ICEnrollment:
+    id: str, iu: ICRegistration, options: dict[str, Any] = {}
+) -> ICRegistration:
     """
     update a interclub registration
     """
     options1 = options.copy()
-    options1["_model"] = options1.pop("_model", ICEnrollment)
+    options1["_model"] = options1.pop("_model", ICRegistration)
     iudict = iu.model_dump(exclude_unset=True)
     iudict.pop("id", None)
-    return cast(ICEnrollment, await DbICEnrollment.update(id, iudict, options1))
+    return cast(ICRegistration, await DbICRegistration.update(id, iudict, options1))
 
 
 # business methods
 
 
-async def find_icregistration(idclub: int) -> ICEnrollment | None:
+async def find_icregistration(idclub: int) -> ICRegistration | None:
     """
     find an registration by idclub
     """
@@ -80,7 +82,7 @@ async def find_icregistration(idclub: int) -> ICEnrollment | None:
 
 async def set_icregistration(
     idclub: int, ie: ICEnrollmentIn, bt: BackgroundTasks
-) -> ICEnrollment:
+) -> ICRegistration:
     """
     set registration (and overwrite it if it already exists)
     """
@@ -95,7 +97,7 @@ async def set_icregistration(
         assert enr.id
         nenr = await update_icregistration(
             enr.id,
-            ICEnrollment(
+            ICRegistration(
                 name=ie.name,
                 locale=locale,
                 teams1=ie.teams1,
